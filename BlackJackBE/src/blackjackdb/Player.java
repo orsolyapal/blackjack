@@ -4,11 +4,11 @@
  */
 package blackjackdb;
 
-import java.sql.Date; // java.sql.TimeStamp; java.util.Calendar;
+import java.time.LocalDateTime;
 
 public class Player {
     private int id;
     private String name;
     private String email;
-    private Date regDate;
+    private LocalDateTime regDate;
 }

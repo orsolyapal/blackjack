@@ -8,6 +8,6 @@ package blackjackdb;
  *
  * @author Orsi
  */
-public class PlayersDAO {
+public class PlayerDAO {
     
 }
