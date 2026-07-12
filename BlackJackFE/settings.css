@@ -1,0 +1,13 @@
+td, th{
+    border: 1px solid black;
+}  
+
+table{
+    border: 1px solid black;
+    border-collapse: collapse;
+    cursor: pointer;
+}
+
+.selected-row{
+    background-color: #ffbbff; /* #d3ecff;*/
+}

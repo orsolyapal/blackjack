@@ -1,0 +1,73 @@
+<!-- Egyszerű táblázat szerkezet -->
+<table id="myTable" border="1" style="border-collapse: collapse; width: 100%; cursor: pointer;">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Név</th>
+    </tr>
+  </thead>
+  <tbody>
+    <!-- Ide kerülnek majd a JS-sel hozzáadott sorok -->
+    <tr data-id="101">
+      <td>101</td>
+      <td>Kovács János (Már bent lévő sor)</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Kijelölt sor ID-ja: <strong id="selectedValue">Nincs kijelölve semmi</strong></p>
+
+<script>
+  // Ez a változó fogja tárolni a kijelölt sor értékét
+  let selectedRowId = null;
+
+  // 1. Eseménykezelő a táblázatra (Eseménydelegálás)
+  const tableBody = document.querySelector('#myTable tbody');
+
+  tableBody.addEventListener('click', function(event) {
+    // Megkeressük a legközelebbi TR elemet a kattintás helyétől
+    const clickedRow = event.target.closest('tr');
+    
+    // Ha nem sorra kattintottak (pl. üres részre a tbody-n belül), ne csináljunk semmit
+    if (!clickedRow) return;
+
+    // 2. Vizuális visszajelzés (opcionális, de ajánlott)
+    // Eltávolítjuk a kijelölés osztályt a korábban kijelölt sorról
+    const previouslySelected = tableBody.querySelector('.selected-row');
+    if (previouslySelected) {
+      previouslySelected.classList.remove('selected-row');
+      previouslySelected.style.backgroundColor = ''; // Alaphelyzetbe állítás
+    }
+
+    // Háttérszín átállítása a kijelölt sornál
+    clickedRow.classList.add('selected-row');
+    clickedRow.style.backgroundColor = '#d3ecff'; 
+
+    // 3. A változó értékének beállítása
+    // Kiolvassuk a data-id attribútum értékét
+    selectedRowId = clickedRow.dataset.id;
+    
+    // Csak hogy lássuk az oldalon is a változást:
+    document.getElementById('selectedValue').innerText = selectedRowId;
+    
+    console.log("A változó új értéke:", selectedRowId);
+  });
+
+  // --- Illusztráció: Új sor hozzáadása gombnyomásra ---
+  // Ez bizonyítja, hogy az új sorokra is automatikusan működik a kijelölés!
+  function addDynamicRow(id, name) {
+    const newRow = document.createElement('tr');
+    newRow.setAttribute('data-id', id); // Fontos: beállítjuk az ID-t attribútumként
+    
+    newRow.innerHTML = `
+      <td>${id}</td>
+      <td>${name} (Újonnan hozzáadott)</td>
+    `;
+    
+    tableBody.appendChild(newRow);
+  }
+
+  // Teszt jelleggel hozzáadunk két sort egy kis idő múlva
+  setTimeout(() => addDynamicRow(102, "Nagy Erzsébet"), 1000);
+  setTimeout(() => addDynamicRow(103, "Szabó Péter"), 2000);
+</script>

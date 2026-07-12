@@ -1,0 +1,60 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Black Jack</title>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href ="blackjack.css">
+        <script src="./playingcard.js"></script>
+    </head>
+    <body>
+        <div class="gameboard">
+            <div class="menu">
+                <button onclick="newGame()">Új játék</button>
+                <button id="btn-newhand" onclick="newHand()">Új leosztás</button>
+                <button disabled="true">Statisztikák</button>
+                <button id="btn-settings">Beállítások</button>                
+            </div>
+            <div id="player" class="playingboard">
+                <div class="info-box">
+                    <div id="player-name">Játékos</div>
+                    <div id="player-bet"></div>
+                    <div id="player-points"></div>
+                    <div id="player-result"></div>
+                    <div id="player-stack"></div>
+                    <div id="player-gameover"></div>
+                </div>
+                <div class="card-box"></div>
+                <div class="bet-box">
+                    <div>Kérem, tegyen tétet!</div>
+                    <form onsubmit="return false;"> 
+                        <div class="label-bet">összeg: </div>
+                        <input type="number" id="bet-amount">
+                        <button type="button" onclick="placeBet()">OK</button>
+                    </form>
+                </div>
+                <div class="button-box">
+                    <button id="btn-hit" onclick="hit()">Lapot kérek</button>
+                    <button id="btn-stand" onclick="stand()">Megállok</button>
+                    <button id="btn-split">Split</button>
+                    <button id="btn-double" onclick="doubleDown()">Duplázó</button>
+                </div>
+            </div>
+            <div id="dealer" class="playingboard">
+                <div class="info-box">
+                    <div>Osztó</div>
+                    <div id="dealer-bet"></div>
+                    <div id="dealer-points"></div> 
+                    <div id="dealer-result"></div>
+                    <div id="dealer-stack"></div>
+                </div>
+                <div class="card-box">                    
+                    
+                </div>
+                <div class="button-box"></div>
+            </div>
+        </div>        
+
+        <script src="./player.js"></script>
+        <script src="./blackjack.js"></script>        
+    </body>
+</html>
