@@ -11,4 +11,27 @@ public class Player {
     private String name;
     private String email;
     private LocalDateTime regDate;
+    
+    public Player(int id, String name, String email, LocalDateTime regDate){
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.regDate = regDate;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public LocalDateTime getRegDate() {
+        return regDate;
+    }
 }
