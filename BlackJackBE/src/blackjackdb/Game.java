@@ -7,28 +7,38 @@ package blackjackdb;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-public class Game {
-
-    
+public class Game {    
     private int id;
-    private int playerId;
-    private LocalDateTime startDate;
+    private final int playerId;
+    private final LocalDateTime startDate;
     private LocalDateTime endDate;
-    private int bankRoll;
+    private final int bankRoll;
     private int stack;
     private boolean playerWon;
     private int moneyWon;
-    private ArrayList<Hand> hands;   
+    private final ArrayList<Hand> hands;   
     
-    public Game(int id, int playerId, LocalDateTime startDate, int bankRoll){
-        this.id = id;
+    /*Start a New Game (not yet in DB)*/
+    public Game(int playerId, int bankRoll){
         this.playerId = playerId;
-        this.startDate = startDate;
+        this.startDate = LocalDateTime.now();
         this.endDate = null;
         this.bankRoll = bankRoll;
         this.stack = bankRoll;
         this.hands = new ArrayList<>();
     };
+    
+    /*Get a Game from the DB */
+    public Game(int id, int playerId, LocalDateTime startDate, LocalDateTime endDate, int bankRoll, boolean playerWon, int moneyWon, ArrayList<Hand> hands){
+        this.id = id;
+        this.playerId = playerId;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.bankRoll = bankRoll;
+        this.playerWon = playerWon;
+        this.moneyWon = moneyWon;
+        this.hands = hands; 
+    }
     
     public int getId() {
         return id;
@@ -81,5 +91,8 @@ public class Game {
     public void setMoneyWon(int moneyWon){
         this.moneyWon = moneyWon;
     }
-            
+    
+    public void addHand(Hand hand){
+        this.hands.add(hand);
+    }    
 }

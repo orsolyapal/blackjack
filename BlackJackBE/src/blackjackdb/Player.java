@@ -12,6 +12,11 @@ public class Player {
     private String email;
     private LocalDateTime regDate;
     
+    public Player(String name, String email){
+        this.name = name;
+        this.email = email;
+    }
+    
     public Player(int id, String name, String email, LocalDateTime regDate){
         this.id = id;
         this.name = name;

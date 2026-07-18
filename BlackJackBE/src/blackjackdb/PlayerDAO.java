@@ -4,10 +4,34 @@
  */
 package blackjackdb;
 
+
+import java.util.ArrayList;
+import java.time.LocalDateTime;
 /**
  *
  * @author Orsi
  */
 public class PlayerDAO {
     
+    public static ArrayList<Player> findAll(){
+        ArrayList<Player> players = new ArrayList<>();
+        
+        for(ArrayList<Object> playerData : DbManager.getPlayers()){
+            Player player = new Player((int) playerData.get(0), (String) playerData.get(1), (String) playerData.get(2), (LocalDateTime) playerData.get(3));
+            players.add(player);
+        }        
+        return players;
+    }
+    
+    public static boolean create(Player player){
+        DbManager.createPlayer(player.getName(), player.getEmail());
+        return false;
+    }
+    
+    /*If the player doesn't connected to any game, than it can be deleted. Otherwise not!*/
+    public static boolean delete(Player player){
+        return false;
+    }
+    
+    /*The player shouldn't be updated!*/
 }
