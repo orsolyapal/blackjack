@@ -7,10 +7,7 @@ package blackjackdb;
 
 import java.util.ArrayList;
 import java.time.LocalDateTime;
-/**
- *
- * @author Orsi
- */
+
 public class PlayerDAO {
     
     public static ArrayList<Player> findAll(){
@@ -21,7 +18,7 @@ public class PlayerDAO {
             players.add(player);
         }        
         return players;
-    }
+    }    
     
     public static boolean create(Player player){
         DbManager.createPlayer(player.getName(), player.getEmail());
@@ -30,8 +27,11 @@ public class PlayerDAO {
     
     /*If the player doesn't connected to any game, than it can be deleted. Otherwise not!*/
     public static boolean delete(Player player){
+        if(DbManager.getGamesByPlayer(player.getId()).isEmpty()){
+            DbManager.deletePlayer(player.getId());
+            return true;
+        } 
         return false;
     }
-    
     /*The player shouldn't be updated!*/
 }

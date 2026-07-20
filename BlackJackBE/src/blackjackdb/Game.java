@@ -16,7 +16,7 @@ public class Game {
     private int stack;
     private boolean playerWon;
     private int moneyWon;
-    private final ArrayList<Hand> hands;   
+    private ArrayList<Hand> hands;   
     
     /*Start a New Game (not yet in DB)*/
     public Game(int playerId, int bankRoll){
@@ -25,16 +25,16 @@ public class Game {
         this.endDate = null;
         this.bankRoll = bankRoll;
         this.stack = bankRoll;
-        this.hands = new ArrayList<>();
     };
     
     /*Get a Game from the DB */
-    public Game(int id, int playerId, LocalDateTime startDate, LocalDateTime endDate, int bankRoll, boolean playerWon, int moneyWon, ArrayList<Hand> hands){
+    public Game(int id, int playerId, LocalDateTime startDate, LocalDateTime endDate, int bankRoll, int stack, boolean playerWon, int moneyWon, ArrayList<Hand> hands){
         this.id = id;
         this.playerId = playerId;
         this.startDate = startDate;
         this.endDate = endDate;
         this.bankRoll = bankRoll;
+        this.stack = stack;
         this.playerWon = playerWon;
         this.moneyWon = moneyWon;
         this.hands = hands; 
@@ -76,6 +76,21 @@ public class Game {
         return hands;
     }
     
+    public void setHands(ArrayList<Hand> hands){
+        this.hands = new ArrayList<>();
+        this.addHands(hands);
+    }
+    
+    public void addHands(ArrayList<Hand> hands){
+        for(Hand hand : hands){
+            this.hands.add(hand);
+        }
+    }
+    
+    public void addHand(Hand hand){
+        this.hands.add(hand);
+    }
+    
     public void setEndDate(LocalDateTime endDate){
         this.endDate = endDate;
     }
@@ -91,8 +106,4 @@ public class Game {
     public void setMoneyWon(int moneyWon){
         this.moneyWon = moneyWon;
     }
-    
-    public void addHand(Hand hand){
-        this.hands.add(hand);
-    }    
 }

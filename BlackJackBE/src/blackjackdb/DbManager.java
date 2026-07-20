@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
+import java.time.LocalDateTime;
 
 public class DbManager {
     private static String connectionString;
@@ -29,6 +30,8 @@ public class DbManager {
                 "&" + password;
     };
     
+    
+    
     public static ArrayList<ArrayList<Object>> getPlayers(){        
         return getResultTable("select * from Players;");
     };
@@ -41,22 +44,10 @@ public class DbManager {
         return getResultTable("select * from Hands;");
     }
     
-    public static ArrayList<ArrayList<Object>> getGamesByPlayer(int playerId){
-        Connection conn = DbConnector.getConn();
-        try{
-            PreparedStatement pstmt = conn.prepareStatement("select * from Games where playerId = ?");
-            pstmt.setInt(1, playerId);
-            return getResultTable(pstmt);
-        } catch(SQLException sqlException){
-            System.err.println("Hiba a játékos játszmáinak lekérdezése során!" + sqlException.getMessage());
-            return null;
-        }
-    }
-    
     public static boolean createPlayer(String name, String email){
         Connection conn = DbConnector.getConn();
         try{
-            PreparedStatement pstmt = conn.prepareStatement("insert into players (name, email) values(?,?)");
+            PreparedStatement pstmt = conn.prepareStatement("insert into players (name, email) values(?,?);");
             pstmt.setString(1, name);
             pstmt.setString(2, email);
             return pstmt.execute();
@@ -66,21 +57,84 @@ public class DbManager {
         }
     }
     
+    public static boolean deletePlayer(int playerId){
+        Connection conn = DbConnector.getConn();
+        try{
+            PreparedStatement pstmt = conn.prepareStatement("delete from players where playerId = ?;");
+            pstmt.setInt(1, playerId);
+            return pstmt.execute();
+        } catch(SQLException sqlException){
+            System.err.println("Hiba a játékos játszmáinak lekérdezése során!" + sqlException.getMessage());
+            return false;
+        }
+    }
+    
+    public static boolean createGame(int playerId, LocalDateTime startDate, int bankRoll, int stack){
+        Connection conn = DbConnector.getConn();
+        try{
+            PreparedStatement pstmt = conn.prepareStatement("insert into games (playerId, startDate, bankRoll, stack) values(?,?,?,?,?);");
+            pstmt.setInt(1, playerId);
+            pstmt.setObject(2, startDate);
+            pstmt.setInt(3, bankRoll);
+            pstmt.setInt(4, stack);
+            return pstmt.execute();
+        } catch(SQLException sqlException){
+            System.err.println("Hiba a játék létrehozása során!" + sqlException.getMessage());
+            return false;
+        }
+    }
+    
+    public static boolean deleteGame(int gameId){
+        Connection conn = DbConnector.getConn();
+        try{
+            PreparedStatement pstmt = conn.prepareStatement("delete from games where gameId = ?;");
+            pstmt.setInt(1, gameId);
+            return pstmt.execute();
+        } catch(SQLException sqlException){
+            System.err.println("Hiba a játék törlése során!" + sqlException.getMessage());
+            return false;
+        }
+    }
+    
+    public static ArrayList<ArrayList<Object>> getGamesByPlayer(int playerId){
+        Connection conn = DbConnector.getConn();
+        try{
+            PreparedStatement pstmt = conn.prepareStatement("select * from Games where playerId = ?;");
+            pstmt.setInt(1, playerId);
+            return getResultTable(pstmt);
+        } catch(SQLException sqlException){
+            System.err.println("Hiba a játékos játszmáinak lekérdezése során!" + sqlException.getMessage());
+            return new ArrayList<>();
+        }
+    }  
+    
+    public static ArrayList<ArrayList<Object>> getHandsByGame(int gameId){
+        Connection conn = DbConnector.getConn();
+        try{
+            PreparedStatement pstmt = conn.prepareStatement("select * from Hands where gameId = ?;");
+            pstmt.setInt(1, gameId);
+            return getResultTable(pstmt);
+        } catch(SQLException sqlException){
+            System.err.println("Hiba a játék leosztásainak lekérdezése során!" + sqlException.getMessage());
+            return new ArrayList<>();
+        }
+    }  
+    
     private static ArrayList<ArrayList<Object>> getResultTable(PreparedStatement pstmt){
         DbConnector.connectToDb();
         ResultSet rs = DbConnector.selectFromDb(pstmt);
         DbConnector.closeConnectionToDb();
-        return resultSetToMatrix(rs);
+        return resultSetToArray(rs);
     }
     
     private static ArrayList<ArrayList<Object>> getResultTable(String sql){
         DbConnector.connectToDb();
         ResultSet rs = DbConnector.selectFromDb(sql);
         DbConnector.closeConnectionToDb();
-        return resultSetToMatrix(rs);
+        return resultSetToArray(rs);
     }
     
-    private static ArrayList<ArrayList<Object>> resultSetToMatrix(ResultSet rs){
+    private static ArrayList<ArrayList<Object>> resultSetToArray(ResultSet rs){
         ArrayList<ArrayList<Object>> resultMatrix = new ArrayList<>();
         try{               
             ResultSetMetaData rsMetaData = rs.getMetaData();
