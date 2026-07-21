@@ -13,7 +13,7 @@ public class PlayerDAO {
     public static ArrayList<Player> findAll(){
         ArrayList<Player> players = new ArrayList<>();
         
-        for(ArrayList<Object> playerData : DbManager.getPlayers()){
+        for(ArrayList<Object> playerData : DbManager.getAllPlayers()){
             Player player = new Player((int) playerData.get(0), (String) playerData.get(1), (String) playerData.get(2), (LocalDateTime) playerData.get(3));
             players.add(player);
         }        
