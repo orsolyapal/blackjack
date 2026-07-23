@@ -49,27 +49,37 @@ public class DbManager {
     }
     
      public static ArrayList<ArrayList<Object>> getGamesByPlayer(int playerId){
+        ArrayList<ArrayList<Object>> resultTable;
+        DbConnector.connectToDb(connectionString);
         Connection conn = DbConnector.getConn();
         try{
             PreparedStatement pstmt = conn.prepareStatement("select * from Games where playerId = ?;");
             pstmt.setInt(1, playerId);
-            return getResultTable(pstmt);
+            ResultSet rs = pstmt.executeQuery();
+            resultTable = resultSetToArray(rs);
         } catch(SQLException sqlException){
             System.err.println("Hiba a játékos játszmáinak lekérdezése során!" + sqlException.getMessage());
-            return new ArrayList<>();
+            resultTable = new ArrayList<>();
         }
+        DbConnector.closeConnectionToDb();
+        return resultTable;
     }  
     
     public static ArrayList<ArrayList<Object>> getHandsByGame(int gameId){
+        ArrayList<ArrayList<Object>> resultTable;
+        DbConnector.connectToDb(connectionString);
         Connection conn = DbConnector.getConn();
         try{
             PreparedStatement pstmt = conn.prepareStatement("select * from Hands where gameId = ?;");
             pstmt.setInt(1, gameId);
-            return getResultTable(pstmt);
+            ResultSet rs = pstmt.executeQuery();
+            resultTable = resultSetToArray(rs);
         } catch(SQLException sqlException){
             System.err.println("Hiba a játék leosztásainak lekérdezése során!" + sqlException.getMessage());
-            return new ArrayList<>();
+            resultTable = new ArrayList<>();
         }
+        DbConnector.closeConnectionToDb();
+        return resultTable;
     }
     
     private static ArrayList<ArrayList<Object>> getResultTable(PreparedStatement pstmt){
